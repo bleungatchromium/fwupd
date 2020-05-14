@@ -888,6 +888,7 @@ fu_thunderbolt_gudev_uevent_cb (GUdevClient *gudev_client,
 	if (g_strcmp0 (action, "change") == 0) {
 		const gchar *uuid = g_udev_device_get_sysfs_attr (udev_device, "unique_id");
 		MockTree *target = (MockTree *) mock_tree_find_uuid (tt->tree, uuid);
+		g_assert_nonnull (target);
 		fu_plugin_runner_udev_device_changed (tt->plugin, FU_UDEV_DEVICE (target->fu_device),
 						      &error_local);
 		return;
@@ -982,16 +983,18 @@ static gboolean
 test_tree_uuids (const MockTree *node, gpointer data)
 {
 	const MockTree *root = (MockTree *) data;
-	const gchar *uuid = node->uuid;
+	const gchar *uuid;
 	const MockTree *found;
 
+	g_assert_nonnull (node);
+	uuid = node->uuid;
 	g_assert_nonnull (uuid);
 
 	g_debug ("Looking for %s", uuid);
 
 	found = mock_tree_find_uuid (root, uuid);
 	g_assert_nonnull (found);
-	g_assert_cmpstr (node->uuid, ==, found->uuid);
+	g_assert_cmpstr (uuid, ==, found->uuid);
 
 	/* return false so we traverse the whole tree */
 	return FALSE;
