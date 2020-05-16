@@ -187,6 +187,10 @@ fu_security_attrs_calculate_hsi (FuSecurityAttrs *self)
 				g_string_append (str, fwupd_security_attr_flag_to_suffix (hpi_suffixes[j]));
 		}
 	}
+	g_string_append_printf (str, " (v%d.%d.%d)",
+				FWUPD_MAJOR_VERSION,
+				FWUPD_MINOR_VERSION,
+				FWUPD_MICRO_VERSION);
 	return g_string_free (str, FALSE);
 }
 
